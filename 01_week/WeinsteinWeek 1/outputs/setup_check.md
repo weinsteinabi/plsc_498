@@ -16,6 +16,11 @@ User Information:
 Username: weinsteinabi
 User Email: abiweinstein@gmail.com
 
+GitHub Check: 
+On branch main 
+Your branch is ahead of 'origin/main' by 1 commit. 
+Nothing to commit, working tree clean.
+
 Reflection:
 
 Most of the work I have done with R and GitHub together has been through GitHub 
