@@ -259,14 +259,13 @@ You have three views of the same composition:
 ---
 
 
-
-# Data visualization critique 
+# Data visualization critique
 
 - Take five minutes
-  - What is the plot comparing: **shape** or **totals**?
-  - Do the design choices make comparisons easy?
-  - What would change if you used an ECDF instead?
-  - After doing this, talk to your neighbor briefly and compare notes.
+  - What relationship is the figure claiming?
+  - Is the main comparison happening by **position** or by something less accurate?
+  - Does the design help you assess *strength* vs *noise*?
+  - What is one concrete improvement?
 
 .center[
 <img src="internet_speed_cost.png" style="width:50%;">
@@ -303,13 +302,14 @@ ggplot(df, aes(x = region, fill = party)) +
 
 ---
 
-# Data visualization critique 
+
+# Data visualization critique
 
 - Take five minutes
-  - What is the plot comparing: **shape** or **totals**?
-  - Do the design choices make comparisons easy?
-  - What would change if you used an ECDF instead?
-  - After doing this, talk to your neighbor briefly and compare notes.
+  - What relationship is the figure claiming?
+  - Is the main comparison happening by **position** or by something less accurate?
+  - Does the design help you assess *strength* vs *noise*?
+  - What is one concrete improvement?
 
 .center[
 <img src="pie_chart.png" style="width:65%;">

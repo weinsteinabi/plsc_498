@@ -1,0 +1,234 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, graphicx, hyperref}
+\usepackage{enumitem}
+\setlist{nosep}
+\usepackage[margin=1in]{geometry}
+
+\title{In-Class Problem Set: Scatterplots and Association (R + GitHub)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent \textbf{Goal.} Use NBA player data to practice visualizing relationships between \textbf{two quantitative variables} using scatterplots, smoothers, polynomial fits, and careful interpretation. You will pull the data from GitHub, clean variable types, generate required figures, interpret what they show, and submit via GitHub.
+
+\medskip
+\noindent \textbf{Dataset.} \texttt{basketball} (569 rows; 23 variables). Key variables you may use:
+\begin{itemize}
+  \item IDs and labels: \texttt{PLAYER\_NAME}, \texttt{TEAM\_ABBREVIATION}
+  \item Player attributes: \texttt{AGE}, \texttt{PLAYER\_HEIGHT\_INCHES}, \texttt{PLAYER\_WEIGHT}
+  \item Games + performance: \texttt{GP}, \texttt{PTS}, \texttt{REB}, \texttt{AST}, \texttt{NET\_RATING}
+  \item Rates (0--1): \texttt{OREB\_PCT}, \texttt{DREB\_PCT}, \texttt{USG\_PCT}, \texttt{TS\_PCT}, \texttt{AST\_PCT}
+  \item Draft info: \texttt{DRAFT\_YEAR} (contains ``Undrafted'' for some players)
+\end{itemize}
+
+\medskip
+\noindent \textbf{Important data note.} Many columns are stored as \textbf{character strings}. You must convert variables you analyze into appropriate numeric types before plotting.
+
+\medskip
+\noindent \textbf{What to submit (in your GitHub repo).}
+\begin{itemize}
+  \item A script file: \texttt{scripts/lab.R}
+  \item A short write-up: \texttt{outputs/writeup.md}
+  \item Saved figures in \texttt{figures/} (see requirements below)
+\end{itemize}
+
+\medskip
+\noindent \textbf{Rules.}
+\begin{itemize}
+  \item Work inside an \textbf{R Project}.
+  \item Use a \textbf{sequential, hard-coded workflow} (no user-defined functions).
+  \item Save figures using \texttt{ggsave()} (no screenshots).
+  \item Git commands must be run in the \textbf{Terminal tab}, not the R Console.
+  \item Use \texttt{theme\_classic()} unless you explicitly justify an alternative.
+  \item Handle missing values defensibly (state what you did).
+\end{itemize}
+
+\section*{Questions}
+
+\begin{enumerate}
+
+  \item \textbf{Pull the repo and confirm the dataset (proof required).}
+  \begin{enumerate}
+    \item In the \textbf{Terminal tab}, run:
+\begin{verbatim}
+git status
+git pull
+\end{verbatim}
+    \item Confirm the dataset file exists in your repo (path posted in the course repository).
+    \item Create the standard folder structure (if missing): \texttt{scripts/}, \texttt{outputs/}, \texttt{figures/}.
+    \item \textbf{Proof (write-up):} In \texttt{outputs/writeup.md}, paste:
+    \begin{itemize}
+      \item the output of \texttt{getwd()},
+      \item the output of \texttt{list.files()} from the project root, and
+      \item the output of \texttt{list.files("data")} showing the dataset file.
+    \end{itemize}
+  \end{enumerate}
+
+  \item \textbf{Load and clean \texttt{basketball} (proof required).}
+  \begin{enumerate}
+    \item Load the dataset into an object named \texttt{basketball}.
+    \item Create a cleaned object named \texttt{basketball\_clean} where you convert the following columns to numeric:
+    \[
+      \texttt{AGE},\ \texttt{PLAYER\_HEIGHT\_INCHES},\ \texttt{PLAYER\_WEIGHT},\ \texttt{GP},\ \texttt{PTS},\ \texttt{REB},\ \texttt{AST},\ \texttt{NET\_RATING},
+    \]
+    \[
+      \texttt{OREB\_PCT},\ \texttt{DREB\_PCT},\ \texttt{USG\_PCT},\ \texttt{TS\_PCT},\ \texttt{AST\_PCT}.
+    \]
+    \item Create a simple draft indicator:
+    \[
+      \texttt{draft\_status} = \text{``Undrafted'' vs ``Drafted''}
+    \]
+    where ``Drafted'' means \texttt{DRAFT\_YEAR} is not ``Undrafted''.
+    \item \textbf{Proof (write-up):} Report:
+    \begin{itemize}
+      \item the number of rows in \texttt{basketball} and \texttt{basketball\_clean},
+      \item a quick summary of at least three numeric columns (e.g., \texttt{AGE}, \texttt{PTS}, \texttt{USG\_PCT}),
+      \item one sentence describing how you handled missing or non-numeric values after conversion.
+    \end{itemize}
+  \end{enumerate}
+
+  \item \textbf{Relationship 1: usage and scoring (scatterplot baseline).}
+
+  Make a scatterplot of \texttt{USG\_PCT} (x) vs \texttt{PTS} (y).
+  \begin{itemize}
+    \item Use \texttt{geom\_point()} with an overplotting fix (e.g., \texttt{alpha} and/or smaller \texttt{size}).
+    \item Use clear labels. Since \texttt{USG\_PCT} is a proportion, format the x-axis as percent if you can.
+    \item Use \texttt{theme\_classic()}.
+  \end{itemize}
+
+  \noindent Save as:
+  \[
+    \texttt{figures/usg\_pts\_scatter.png}
+  \]
+
+  \item \textbf{Relationship 1 (extension): add a linear smoother with standard errors.}
+
+  Using the same x/y pairing as the previous question, add a linear fit:
+  \begin{itemize}
+    \item \texttt{geom\_smooth(method = "lm", se = TRUE)}
+    \item Keep the points visible (do not remove them).
+  \end{itemize}
+
+  \noindent \textbf{Write-up (3--5 sentences):}
+  \begin{itemize}
+    \item What does the fitted line claim?
+    \item What does the shaded band represent (in plain language)?
+    \item Does the band make you more or less confident about the trend?
+  \end{itemize}
+
+  \noindent Save as:
+  \[
+    \texttt{figures/usg\_pts\_lm\_se.png}
+  \]
+
+  
+  \item \textbf{Relationship 1B: usage and scoring efficiency.}
+
+  Make a scatterplot of \texttt{USG\_PCT} (x) vs \texttt{TS\_PCT} (y).
+  \begin{itemize}
+    \item Use \texttt{geom\_point()} with an overplotting fix (e.g., \texttt{alpha} and/or smaller \texttt{size}).
+    \item Format \texttt{USG\_PCT} and \texttt{TS\_PCT} as percents if you can.
+    \item Add a linear smoother with standard errors: \texttt{geom\_smooth(method = "lm", se = TRUE)}.
+    \item Use \texttt{theme\_classic()}.
+  \end{itemize}
+
+  \noindent \textbf{Write-up (3--5 sentences):}
+  \begin{itemize}
+    \item Does the trend look linear, or do you suspect curvature?
+    \item What does the SE ribbon suggest about uncertainty across usage levels?
+  \end{itemize}
+
+  \noindent Save as:
+  \[
+    \texttt{figures/usg\_ts\_eff\_lm\_se.png}
+  \]
+
+  \item \textbf{Relationship 1C: assists (raw vs rate).}
+
+  Make a scatterplot of \texttt{AST} (x) vs \texttt{AST\_PCT} (y).
+  \begin{itemize}
+    \item Use \texttt{geom\_point()} with an overplotting fix (e.g., \texttt{alpha} and/or smaller \texttt{size}).
+    \item Format \texttt{AST\_PCT} as a percent if you can.
+    \item Add a linear smoother with standard errors: \texttt{geom\_smooth(method = "lm", se = TRUE)}.
+    \item Use \texttt{theme\_classic()}.
+  \end{itemize}
+
+  \noindent \textbf{Write-up (3--5 sentences):}
+  \begin{itemize}
+    \item Are \texttt{AST} and \texttt{AST\_PCT} close to a one-to-one relationship, or are there notable exceptions?
+    \item Give one plausible basketball reason you might see players with similar \texttt{AST} but different \texttt{AST\_PCT}.
+  \end{itemize}
+
+  \noindent Save as:
+  \[
+    \texttt{figures/ast\_astpct\_lm\_se.png}
+  \]
+
+  \item \textbf{Final interpretation (write-up required).}
+
+  In \texttt{outputs/writeup.md}, write 12--16 sentences addressing:
+  \begin{itemize}
+    \item For each figure, what is the main pattern (direction + strength + shape)?
+    \item Name one outlier or ``surprising'' point pattern and what it could imply (without claiming causality).
+    \item Name one concrete plotting choice you made (alpha, axis formatting, legend placement, polynomial fit) and why it helped interpretability.
+  \end{itemize}
+
+  \item \textbf{Git workflow and submission (proof required).}
+
+  You must show evidence of both \textbf{pull} and \textbf{push}, plus at least two commits.
+
+  \begin{enumerate}
+    \item After you finish cleaning the data (Question 2), commit and push:
+\begin{verbatim}
+git status
+git add .
+git commit -m "NBA relationships: clean basketball  types"
+git push
+\end{verbatim}
+
+    \item Before your final push, run a fresh pull (to catch updates):
+\begin{verbatim}
+git pull
+\end{verbatim}
+
+    \item Commit and push your figures + write-up:
+\begin{verbatim}
+git status
+git add .
+git commit -m "NBA relationships: scatterplots + smoothers + writeup"
+git push
+\end{verbatim}
+
+    \item \textbf{Proof (write-up):} Paste:
+    \begin{itemize}
+      \item the output of \texttt{git status} after the final push (clean working tree), and
+      \item the output of \texttt{git log -2}.
+    \end{itemize}
+  \end{enumerate}
+
+\end{enumerate}
+
+\section*{Optional challenge (if you finish early)}
+Choose one:
+\begin{itemize}
+  \item Create a small-multiple version of one relationship by faceting on \texttt{TEAM\_ABBREVIATION} for \textbf{only} the teams with at least 12 players in the dataset. (State your rule and why you chose it.)
+  \item Create a correlation heatmap for the numeric columns you used (and in 4--6 sentences, explain what the heatmap hides that a scatterplot reveals).
+\end{itemize}
+
+\section*{Checklist (before you leave)}
+\begin{itemize}
+  \item \texttt{scripts/lab.R} runs top-to-bottom
+  \item Required figures exist in \texttt{figures/}:
+  \begin{itemize}
+    \item \texttt{usg\_pts\_scatter.png}, \texttt{usg\_pts\_lm\_se.png}
+    \item \texttt{usg\_ts\_eff\_lm\_se.png}, \texttt{ast\_astpct\_lm\_se.png}
+    \item \texttt{size\_reb\_scatter.png}
+    \item \texttt{age\_ts\_poly2\_se.png}
+  \end{itemize}
+  \item \texttt{outputs/writeup.md} includes required proofs + interpretation
+  \item At least two commits + pushed to GitHub
+\end{itemize}
+
+\end{document}

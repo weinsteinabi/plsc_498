@@ -11,7 +11,7 @@
 \begin{document}
 \maketitle
 
-\noindent \textbf{Goal.} Extend the code from the lecture slides to produce a small, reproducible workflow: load the provided dataset, choose variables using the codebook, create multiple figures using explicit mappings, and submit your work through GitHub.
+\noindent \textbf{Goal.} Extend the code from the lecture slides to produce a small, reproducible workflow: load the provided dataset, create multiple figures using explicit mappings, and submit your work through GitHub.
 
 \medskip
 \noindent \textbf{What to submit (in your GitHub repo).}
@@ -47,24 +47,97 @@
   \item \textbf{Load the provided dataset from the \texttt{data/} folder.}
   \begin{enumerate}
     \item Confirm the dataset file exists in \texttt{data/}. (Do not manually move it.)
-    \item Write code in \texttt{scripts/lab.R} to load it into R as an object named \texttt{df}.
+    \item Write code in \texttt{scripts/lab.R} to load it into R as an object named \texttt{vdem}.
+\begin{verbatim}
+# PSEUDOCODE:
+# 1) read the .rds file from the data/ folder
+# 2) store it as vdem
+
+vdem <- readRDS("data/vdem.rds")
+\end{verbatim}
+
     \item \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
     \begin{itemize}
-      \item the dimensions of \texttt{df} (rows $\times$ columns), and
+      \item the dimensions of \texttt{vdem} (rows $\times$ columns), and
       \item the first 3 column names.
     \end{itemize}
+
+\begin{verbatim}
+# PSEUDOCODE for the proof:
+dim(vdem)
+names(vdem)[1:3]
+\end{verbatim}
+
   \end{enumerate}
 
-  \item \textbf{Select variables using the codebook.}
+  \item \textbf{Work with fixed variables (no selection required).}
   \begin{enumerate}
-    \item Consult the dataset codebook and choose:
+    \item For all plots in this assignment, use the following variables from the dataset:
     \begin{itemize}
-      \item \textbf{two continuous} variables (numeric, meaningfully ordered with many values), and
-      \item \textbf{two categorical} variables (groups/labels).
+      \item Access to justice for women: \texttt{v2clacjstw}
+      \item Access to justice for men: \texttt{v2clacjstm}
+      \item Freedom from political killings: \texttt{v2clkill}
+      \item Freedom from torture: \texttt{v2cltort}
     \end{itemize}
-    \item In \texttt{outputs/writeup.md}, list the four variables and briefly justify (1 sentence each) why they are continuous vs categorical.
-    \item \textbf{Proof:} Include either \texttt{str(df)} output for the four variables \emph{or} a small table showing each variable and its class/type.
+
+    \item Treat \emph{all four variables as continuous}. You do \textbf{not} need to identify or justify variable types.
+
+    \item Your baseline plot will use the following mapping (note: no trailing comma):
+\begin{verbatim}
+# PSEUDOCODE:
+# x = justice for women
+# y = justice for men
+# points = one row per observation
+
+library(ggplot2)
+
+p0 <- ggplot(vdem, aes(x = v2clacjstw, y = v2clacjstm)) +
+  geom_point()
+
+p0
+\end{verbatim}
+
+    \item Then create a version that uses \textbf{both} color and size:
+\begin{verbatim}
+# PSEUDOCODE:
+# color = freedom from political killings
+# size  = freedom from torture
+
+p1 <- ggplot(vdem, aes(
+  x = v2clacjstw,
+  y = v2clacjstm,
+  color = v2clkill,
+  size  = v2cltort
+)) +
+  geom_point()
+
+p1
+\end{verbatim}
+
+    \item \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
+    \begin{itemize}
+      \item confirmation that all four variables exist in the dataset (show \texttt{names(vdem)} output or a short snippet), and
+      \item their reported class from \texttt{str()}.
+    \end{itemize}
+
+\begin{verbatim}
+# PSEUDOCODE for the proof:
+names(vdem)
+str(vdem[, c("v2clacjstw","v2clacjstm","v2clkill","v2cltort")])
+\end{verbatim}
+
   \end{enumerate}
+
+\medskip
+\textbf{Pseudocode guide (follow this order in \texttt{scripts/lab.R}):}
+\begin{enumerate}
+  \item Load required libraries (\texttt{ggplot2}, optionally \texttt{tidyverse}).
+  \item Read the dataset from \texttt{data/} into \texttt{vdem}.
+  \item Confirm required variables exist (\texttt{names(vdem)}; \texttt{str(...)}).
+  \item Make the baseline plot (x = \texttt{v2clacjstw}, y = \texttt{v2clacjstm}).
+  \item Make the enhanced plot (add color = \texttt{v2clkill}, size = \texttt{v2cltort}).
+  \item Save plots with \texttt{ggsave()} into \texttt{figures/}.
+\end{enumerate}
 
   \item \textbf{Create a reproducible folder structure + (optional) logging.}
   \begin{enumerate}
@@ -76,18 +149,31 @@
       \item \texttt{logs/} \textit{(optional but recommended)}
     \end{itemize}
     \item In \texttt{scripts/lab.R}, add code that creates any missing directories (without errors).
+\begin{verbatim}
+# PSEUDOCODE:
+# if a folder does not exist, create it
+dir.create("scripts", showWarnings = FALSE)
+dir.create("outputs", showWarnings = FALSE)
+dir.create("figures", showWarnings = FALSE)
+dir.create("logs", showWarnings = FALSE)
+\end{verbatim}
     \item \textbf{Proof:} In \texttt{outputs/writeup.md}, include \texttt{list.files()} output showing the folders.
+\begin{verbatim}
+# PSEUDOCODE for proof:
+list.files()
+\end{verbatim}
+
     \item \textbf{Optional (challenge):} Create a simple log file \texttt{outputs/log.txt} that records:
     \begin{itemize}
       \item the current date/time,
       \item the dataset filename loaded,
-      \item and the names of the four selected variables.
+      \item and the names of the four required variables.
     \end{itemize}
   \end{enumerate}
 
   \item \textbf{Make three plot extensions + comment on them.}
-  
-  Using the lecture code as your baseline, create \textbf{three} distinct extensions (three separate figures). Each figure must include a caption in your write-up that explains:
+
+  Using your baseline plot as the starting point, create \textbf{three} distinct extensions (three separate figures). Each figure must include a caption in your write-up that explains:
   \begin{itemize}
     \item what variables are mapped to what visual properties,
     \item what comparison is easiest to make,
@@ -95,41 +181,43 @@
   \end{itemize}
 
   \medskip
-  \noindent Your three extensions must come from different categories below (choose any three):
+  Your three extensions must come from different categories below (choose any three):
   \begin{enumerate}
-    \item \textbf{Add a mapping:} map a categorical variable to \texttt{color} or \texttt{shape}.
-    \item \textbf{Change the mark:} switch to a different geometry appropriate for the variable types (e.g., boxplot for outcome vs group).
-    \item \textbf{Add an annotation layer (lightweight):} add a title + axis labels + a one-sentence caption in the write-up.
+    \item \textbf{Add an annotation layer:} add a title + axis labels.
     \item \textbf{Handle overplotting:} use transparency (\texttt{alpha}) and briefly explain why.
-    \item \textbf{Re-order categories:} reorder a categorical axis to improve interpretability (explain the ordering rule).
+    \item \textbf{Scale adjustment:} adjust the color scale and/or size scale and explain the effect.
   \end{enumerate}
 
   \medskip
-  \noindent \textbf{Saving requirement:} Save each plot to \texttt{figures/} using \texttt{ggsave()} (do not rely on screenshots). Name files clearly (e.g., \texttt{figures/plot1.png}, \texttt{figures/plot2.png}, \texttt{figures/plot3.png}).
+  \textbf{Saving requirement:} Save each plot to \texttt{figures/} using \texttt{ggsave()} (do not rely on screenshots). Name files clearly (e.g., \texttt{figures/plot1.png}, \texttt{figures/plot2.png}, \texttt{figures/plot3.png}).
 
-  \item \textbf{Public vs expert visualization + GitHub submission (proof required).}
-  \begin{enumerate}
-    \item Create \textbf{two} versions of the \emph{same} visualization:
-    \begin{itemize}
-      \item one intended for a \textbf{general public} audience, and
-      \item one intended for an \textbf{expert} audience.
-    \end{itemize}
-    \item In \texttt{outputs/writeup.md}, state at least \textbf{three decision rules} you used to adapt the design (e.g., labeling density, uncertainty/context, annotation, choice of scale, what to simplify vs keep).
-    \item \textbf{Challenge ideas (pick one):}
-    \begin{itemize}
-      \item Add a short ``limitations'' note for the public version (1--2 sentences).
-      \item Add a technical note for the expert version describing a key default or transformation.
-      \item Add a small multiple (two panels) for the expert version only.
-      \item Add a deliberately ``bad'' version and write 3 bullets on why it misleads.
-    \end{itemize}
-    \item \textbf{GitHub requirement:} Commit and push your work.
-    
-    \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
-    \begin{itemize}
-      \item the output of \texttt{git status} \emph{after} committing (showing a clean working tree), and
-      \item either a screenshot of your GitHub repo showing the latest commit \emph{or} the commit hash and message.
-    \end{itemize}
-  \end{enumerate}
+\begin{verbatim}
+# PSEUDOCODE for saving:
+ggsave("figures/plot_baseline.png", plot = p0, width = 7, height = 5)
+ggsave("figures/plot_color_size.png", plot = p1, width = 7, height = 5)
+\end{verbatim}
+
+  \item \textbf{If you finish early:}
+  \begin{itemize}
+    \item Add a short ``limitations'' note (1--2 sentences) about what the plot cannot show.
+    \item Add a deliberately ``bad'' version and write 3 bullets on why it misleads.
+  \end{itemize}
+
+  \item \textbf{GitHub requirement:} Commit and push your work.
+
+  \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
+  \begin{itemize}
+    \item the output of \texttt{git status} \emph{after} committing (showing a clean working tree), and
+    \item either a screenshot of your GitHub repo showing the latest commit \emph{or} the commit hash and message.
+  \end{itemize}
+
+\begin{verbatim}
+# PSEUDOCODE (terminal):
+git add .
+git commit -m "finish lab"
+git status
+git push
+\end{verbatim}
 
 \end{enumerate}
 
@@ -137,7 +225,7 @@
 \begin{itemize}
   \item \texttt{scripts/lab.R} exists and runs top-to-bottom
   \item \texttt{outputs/writeup.md} exists and includes required proofs
-  \item At least 4 figures saved in \texttt{figures/} (3 extensions + 2 audience versions can overlap if you clearly label)
+  \item At least 4 figures saved in \texttt{figures/}
   \item Work is pushed to GitHub
 \end{itemize}
 
