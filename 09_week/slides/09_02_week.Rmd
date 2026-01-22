@@ -1,0 +1,320 @@
+---
+title: "Coding Assignment: Proportions and Nested Proportions"
+subtitle: "A quick recap + starter patterns you will extend (stacked, normalized, nested)"
+author: "Jared Edgerton"
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts, plsc498.css]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: ""
+---
+
+
+# Today (quick recap → code you will extend)
+
+We are practicing **composition** questions:
+
+- Always identify the **denominator** (“proportion *of what*?”)
+- Stacked vs side-by-side bars are for **different comparisons**
+- Normalized stacked bars (`position = "fill"`) show **within-x proportions**
+- Nested proportions = **parts within parts** (often easiest with facets)
+
+Goal: reuse these patterns for **state-level social data**:
+- election outcome group (e.g., winner group)
+- COVID and pneumonia deaths (pre-election window)
+
+---
+
+# Setup
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(scales)
+library(forcats)
+
+set.seed(123)
+```
+
+---
+
+# Simulated data
+
+
+```{r, message=FALSE, warning=FALSE}
+st_name <- c(state.name, "District of Columbia"); st_abbr <- c(state.abb, "DC"); st_region <- c(as.character(state.region), "South")
+n_states <- length(st_name)
+votes_total <- round(rlnorm(n_states, meanlog = log(3.1e6), sdlog = 0.9))
+share_blue_raw <- rbeta(n_states, shape1 = 40, shape2 = 40)
+share_blue <- share_blue_raw +   ifelse(st_region == "Northeast",  0.03, 0) +
+  ifelse(st_region == "South",     -0.02, 0) +  ifelse(st_region == "West",       0.01, 0)
+share_blue <- pmin(pmax(share_blue, 0.05), 0.95)
+votes_blue <- round(votes_total * share_blue); votes_red  <- votes_total - votes_blue
+share_blue <- votes_blue / votes_total; share_red  <- votes_red  / votes_total
+margin_blue <- share_blue - share_red
+winner_group <- ifelse(margin_blue >= 0, "Blue winner", "Red winner"); winner_group <- factor(winner_group, levels = c("Blue winner", "Red winner"))
+deaths_covid_pre <- round(rlnorm(n_states, meanlog = log(9000), sdlog = 0.8))
+deaths_pneum_pre <- round(rlnorm(n_states, meanlog = log(12000), sdlog = 0.8))
+deaths_covid_pre <- round(deaths_covid_pre * (votes_total / mean(votes_total))^0.20)
+deaths_pneum_pre <- round(deaths_pneum_pre * (votes_total / mean(votes_total))^0.20)
+state_synth <- tibble(
+  st_name = st_name, st_abbr = st_abbr,
+  region = factor(st_region, levels = c("Northeast", "Midwest", "South", "West")),
+  votes_total = votes_total, votes_blue = votes_blue, votes_red = votes_red,
+  share_blue = share_blue, share_red = share_red,
+  margin_blue = margin_blue,
+  deaths_covid_pre = deaths_covid_pre, deaths_pneum_pre = deaths_pneum_pre,
+  winner_group = winner_group)
+```
+
+---
+
+# Quick check: ranges look reasonable?
+
+```{r, message=FALSE, warning=FALSE}
+state_synth %>% summarise(n_states = n(),
+    votes_total_min = min(votes_total), votes_total_median = median(votes_total),
+    votes_total_max = max(votes_total), share_blue_min = min(share_blue),
+    share_blue_median = median(share_blue), share_blue_max = max(share_blue),
+    covid_min = min(deaths_covid_pre), covid_median = median(deaths_covid_pre),
+    covid_max = max(deaths_covid_pre), pneum_min = min(deaths_pneum_pre),
+    pneum_median = median(deaths_pneum_pre), pneum_max = max(deaths_pneum_pre))
+```
+
+---
+
+# Variable mapping (synthetic → real)
+
+When you swap in the real dataset, you’ll map:
+
+- `winner_group` → (winner based on vote shares / margin)
+- `deaths_covid_pre` → (COVID deaths up to the cutoff date)
+- `deaths_pneum_pre` → (pneumonia deaths up to the cutoff date)
+- `region` → (optional grouping variable for nested proportions)
+
+The **plot patterns** are the point: keep the structure, swap the column names.
+
+---
+
+# Starter pattern: counts (how many states in each winner group?)
+
+Counts answer: “How many states are in each group?”
+
+```{r, message=FALSE, warning=FALSE, fig.width=7, fig.height=4}
+ggplot(state_synth, aes(x = winner_group)) +
+  geom_bar() +
+  theme_classic() +
+  labs(x = NULL, y = "Number of states")
+```
+
+---
+
+# Same data, different question
+
+Proportions answer: “What fraction of states are in each group?”
+
+```{r, message=FALSE, warning=FALSE, fig.width=7, fig.height=3.25}
+ggplot(state_synth, aes(x = 1, fill = winner_group)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = percent_format()) +
+  theme_classic() +
+  labs(x = NULL, y = "Proportion of states", fill = NULL)
+```
+
+---
+
+# Nested proportions: within each region, what share of states are Blue/Red?
+
+Here the denominator is: **within each region**.
+
+```{r, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+ggplot(state_synth, aes(x = region, fill = winner_group)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = percent_format()) +
+  theme_classic() +
+  labs(x = NULL, y = "Proportion (within region)", fill = NULL)
+```
+
+Interpretation prompts:
+- Which regions are more “Blue winner” vs “Red winner” in this synthetic data?
+- What comparison is easiest in a normalized stacked bar? (top/bottom segments)
+
+---
+
+# Side-by-side alternative (different comparison)
+
+If you want to compare **counts** (not proportions), use side-by-side.
+
+```{r, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+ggplot(state_synth, aes(x = region, fill = winner_group)) +
+  geom_bar(position = "dodge") +
+  theme_classic() +
+  labs(x = NULL, y = "Number of states", fill = NULL)
+```
+
+---
+
+# Composition outcome: where do deaths come from?
+
+Now the “whole” is **total deaths** (across states), split by winner group.
+
+First, put the two death variables into long format.
+
+```{r, message=FALSE, warning=FALSE}
+deaths_long <- state_synth %>%
+  select(st_name, region, winner_group, deaths_covid_pre, deaths_pneum_pre) %>%
+  pivot_longer(
+    cols = c(deaths_covid_pre, deaths_pneum_pre),
+    names_to = "death_type",
+    values_to = "deaths"
+  ) %>%
+  mutate(
+    death_type = recode(death_type,
+                        deaths_covid_pre = "COVID deaths (pre-election)",
+                        deaths_pneum_pre = "Pneumonia deaths (pre-election)")
+  )
+```
+
+---
+
+# Total deaths by type (counts)
+
+Counts answer: “How many total deaths are we talking about?”
+
+```{r, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+deaths_long %>%
+  group_by(death_type, winner_group) %>%
+  summarise(total_deaths = sum(deaths), .groups = "drop") %>%
+  ggplot(aes(x = death_type, y = total_deaths, fill = winner_group)) +
+  geom_col() +
+  scale_y_continuous(labels = comma_format()) +
+  theme_classic() +
+  labs(x = NULL, y = "Total deaths", fill = NULL)
+```
+
+---
+
+# Same data, different question
+
+Proportions answer: “Within COVID (or pneumonia), what share of deaths come from Blue-winner vs Red-winner states?”
+
+```{r, message=FALSE, warning=FALSE, fig.width=8, fig.height=3.25}
+deaths_long %>% group_by(death_type, winner_group) %>%
+  summarise(total_deaths = sum(deaths), .groups = "drop") %>%
+  ggplot(aes(x = death_type, y = total_deaths, fill = winner_group)) +
+  geom_col(position = "fill") +
+  scale_y_continuous(labels = percent_format()) +
+  theme_classic() +
+  labs(x = NULL, y = "Proportion of deaths (within type)", fill = NULL)
+```
+
+---
+
+# Nested proportions
+
+Now the denominator is: **within each region AND death type**.
+
+```{r, message=FALSE, warning=FALSE, fig.width=7, fig.height=4.1}
+deaths_long %>% group_by(region, death_type, winner_group) %>%
+  summarise(total_deaths = sum(deaths), .groups = "drop") %>%
+  ggplot(aes(x = region, y = total_deaths, fill = winner_group)) +
+  geom_col(position = "fill") +
+  facet_wrap(~ death_type) +
+  scale_y_continuous(labels = percent_format()) +
+  theme_classic() +
+  labs(x = NULL, y = "Proportion (within region)", fill = NULL)
+```
+
+---
+
+# Small multiples
+
+Stacking can make some comparisons hard (middle segments). A common repair: **one panel per group** with a common y-axis.
+
+```{r, message=FALSE, warning=FALSE, fig.width=7, fig.height=3}
+deaths_long %>% group_by(region, death_type, winner_group) %>% 
+  summarise(total_deaths = sum(deaths), .groups = "drop") %>%
+  ggplot(aes(x = region, y = total_deaths)) +
+  geom_col() +
+  facet_grid(winner_group ~ death_type) +
+  scale_y_continuous(labels = comma_format()) +
+  theme_classic() +
+  labs(x = NULL, y = "Total deaths")
+```
+
+---
+
+# Waffle plot for composition
+
+A waffle plot is a **parts-to-whole** display. It can work when there are few categories.
+
+Here we show: the share of total COVID deaths coming from each winner group.
+
+```{r, message=FALSE, warning=FALSE}
+covid_props <- deaths_long %>%
+  filter(death_type == "COVID deaths (pre-election)") %>%
+  group_by(winner_group) %>%
+  summarise(total = sum(deaths), .groups = "drop") %>%
+  mutate(prop = total / sum(total)) %>%
+  arrange(desc(prop)) %>%
+  mutate(pct = floor(prop * 100))
+
+remainder <- 100 - sum(covid_props$pct)
+covid_props$pct[1] <- covid_props$pct[1] + remainder
+
+waffle_df <- covid_props %>%
+  select(winner_group, pct) %>%
+  tidyr::uncount(weights = pct) %>%
+  mutate(
+    square = dplyr::row_number(),
+    row = (square - 1) %/% 10 + 1,
+    col = (square - 1) %% 10 + 1
+  )
+```
+
+---
+
+# Waffle plot
+
+```{r, message=FALSE, warning=FALSE, fig.width=7, fig.height=4}
+ggplot(waffle_df, aes(x = col, y = row, fill = winner_group)) +
+  geom_tile(color = "white", linewidth = 0.4) +
+  coord_equal() +
+  scale_y_reverse() +
+  scale_fill_brewer(palette = "Dark2") +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "COVID deaths composition (waffle plot)", fill = NULL)
+```
+
+---
+
+# Design justification 
+
+For any composition plot you make, you should be able to write:
+
+- What is the **whole**?
+- What are the **parts**?
+- What comparisons does this design make easy?
+- What comparisons does it make hard?
+- What alternative would you choose for a different question?
+
+---
+
+# Save a figure
+
+```{r, message=FALSE, warning=FALSE}
+p <- deaths_long %>%
+  group_by(death_type, winner_group) %>%
+  summarise(total_deaths = sum(deaths), .groups = "drop") %>%
+  ggplot(aes(x = death_type, y = total_deaths, fill = winner_group)) +
+  geom_col(position = "fill") +
+  scale_y_continuous(labels = percent_format()) +
+  theme_classic() +
+  labs(x = NULL, y = "Proportion of deaths (within type)", fill = NULL)
+
+ggsave(filename = "deaths_composition_normalized.png", plot = p, width = 8, height = 4, dpi = 300)
+```

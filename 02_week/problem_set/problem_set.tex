@@ -11,134 +11,225 @@
 \begin{document}
 \maketitle
 
-\noindent \textbf{Goal.} Extend the code from the lecture slides to produce a small, reproducible workflow: load the provided dataset, choose variables using the codebook, create multiple figures using explicit mappings, and submit your work through GitHub.
+\noindent \textbf{Goal.} Practice a simple, reproducible visualization workflow in R:
+load a dataset, make a small number of plots using fixed variables, save your output,
+and push your work to GitHub.
 
 \medskip
 \noindent \textbf{What to submit (in your GitHub repo).}
 \begin{itemize}
   \item A script file: \texttt{scripts/lab.R}
   \item A short write-up: \texttt{outputs/writeup.md}
-  \item Saved figures: at least 4 image files in \texttt{figures/}
-  \item (Optional but recommended) a log file: \texttt{outputs/log.txt}
+  \item Saved figures: at least 3 image files in \texttt{figures/}
 \end{itemize}
 
 \medskip
 \noindent \textbf{Rules.}
 \begin{itemize}
-  \item Work inside an \textbf{R Project}.
+  \item Work inside an \textbf{single R Project}.
   \item Use a \textbf{sequential, hard-coded workflow} (no user-defined functions).
-  \item You may consult notes and documentation. If you use any external code, cite it in your write-up.
+  \item You may consult notes and documentation. If you use external code, cite it.
 \end{itemize}
 
 \section*{Questions}
 
 \begin{enumerate}
 
-  \item \textbf{Create an R Project (proof required).}
-  \begin{enumerate}
-    \item Create an R Project for this course on your computer.
-    \item \textbf{Proof:} In your \texttt{outputs/writeup.md}, include:
-    \begin{itemize}
-      \item the output of \texttt{getwd()} run from inside the project, and
-      \item a screenshot showing the \texttt{.Rproj} file in your project folder \emph{or} the RStudio Project name visible in the RStudio window.
-    \end{itemize}
-  \end{enumerate}
-
-  \item \textbf{Load the provided dataset from the \texttt{data/} folder.}
-  \begin{enumerate}
-    \item Confirm the dataset file exists in \texttt{data/}. (Do not manually move it.)
-    \item Write code in \texttt{scripts/lab.R} to load it into R as an object named \texttt{df}.
-    \item \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
-    \begin{itemize}
-      \item the dimensions of \texttt{df} (rows $\times$ columns), and
-      \item the first 3 column names.
-    \end{itemize}
-  \end{enumerate}
-
-  \item \textbf{Select variables using the codebook.}
-  \begin{enumerate}
-    \item Consult the dataset codebook and choose:
-    \begin{itemize}
-      \item \textbf{two continuous} variables (numeric, meaningfully ordered with many values), and
-      \item \textbf{two categorical} variables (groups/labels).
-    \end{itemize}
-    \item In \texttt{outputs/writeup.md}, list the four variables and briefly justify (1 sentence each) why they are continuous vs categorical.
-    \item \textbf{Proof:} Include either \texttt{str(df)} output for the four variables \emph{or} a small table showing each variable and its class/type.
-  \end{enumerate}
-
-  \item \textbf{Create a reproducible folder structure + (optional) logging.}
-  \begin{enumerate}
-    \item Ensure these folders exist in your project:
-    \begin{itemize}
-      \item \texttt{scripts/}
-      \item \texttt{outputs/}
-      \item \texttt{figures/}
-      \item \texttt{logs/} \textit{(optional but recommended)}
-    \end{itemize}
-    \item In \texttt{scripts/lab.R}, add code that creates any missing directories (without errors).
-    \item \textbf{Proof:} In \texttt{outputs/writeup.md}, include \texttt{list.files()} output showing the folders.
-    \item \textbf{Optional (challenge):} Create a simple log file \texttt{outputs/log.txt} that records:
-    \begin{itemize}
-      \item the current date/time,
-      \item the dataset filename loaded,
-      \item and the names of the four selected variables.
-    \end{itemize}
-  \end{enumerate}
-
-  \item \textbf{Make three plot extensions + comment on them.}
-  
-  Using the lecture code as your baseline, create \textbf{three} distinct extensions (three separate figures). Each figure must include a caption in your write-up that explains:
+%-------------------------------------------------
+\item \textbf{Create an R Project (proof required).}
+\begin{enumerate}
+  \item Create an R Project for this course.
+  \item \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
   \begin{itemize}
-    \item what variables are mapped to what visual properties,
-    \item what comparison is easiest to make,
-    \item and one default choice you are accepting (or changing) and why.
+    \item the output of \texttt{getwd()}, and
+    \item a screenshot showing the project name in RStudio.
+  \end{itemize}
+\end{enumerate}
+
+%-------------------------------------------------
+\item \textbf{Load the dataset.}
+\begin{enumerate}
+  \item Confirm the dataset file exists in \texttt{data/}.
+  \item Load the dataset into R as an object named \texttt{vdem}.
+
+\begin{verbatim}
+# Step 1: load the dataset
+vdem <- readRDS("data/vdem.rds")
+\end{verbatim}
+
+  \item \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
+  \begin{itemize}
+    \item the dimensions of \texttt{vdem} (rows $\times$ columns),
+    \item the first three column names.
   \end{itemize}
 
-  \medskip
-  \noindent Your three extensions must come from different categories below (choose any three):
-  \begin{enumerate}
-    \item \textbf{Add a mapping:} map a categorical variable to \texttt{color} or \texttt{shape}.
-    \item \textbf{Change the mark:} switch to a different geometry appropriate for the variable types (e.g., boxplot for outcome vs group).
-    \item \textbf{Add an annotation layer (lightweight):} add a title + axis labels + a one-sentence caption in the write-up.
-    \item \textbf{Handle overplotting:} use transparency (\texttt{alpha}) and briefly explain why.
-    \item \textbf{Re-order categories:} reorder a categorical axis to improve interpretability (explain the ordering rule).
-  \end{enumerate}
+\begin{verbatim}
+# Proof code
+dim(vdem)
+names(vdem)[1:3]
+\end{verbatim}
 
-  \medskip
-  \noindent \textbf{Saving requirement:} Save each plot to \texttt{figures/} using \texttt{ggsave()} (do not rely on screenshots). Name files clearly (e.g., \texttt{figures/plot1.png}, \texttt{figures/plot2.png}, \texttt{figures/plot3.png}).
+\end{enumerate}
 
-  \item \textbf{Public vs expert visualization + GitHub submission (proof required).}
-  \begin{enumerate}
-    \item Create \textbf{two} versions of the \emph{same} visualization:
-    \begin{itemize}
-      \item one intended for a \textbf{general public} audience, and
-      \item one intended for an \textbf{expert} audience.
-    \end{itemize}
-    \item In \texttt{outputs/writeup.md}, state at least \textbf{three decision rules} you used to adapt the design (e.g., labeling density, uncertainty/context, annotation, choice of scale, what to simplify vs keep).
-    \item \textbf{Challenge ideas (pick one):}
-    \begin{itemize}
-      \item Add a short ``limitations'' note for the public version (1--2 sentences).
-      \item Add a technical note for the expert version describing a key default or transformation.
-      \item Add a small multiple (two panels) for the expert version only.
-      \item Add a deliberately ``bad'' version and write 3 bullets on why it misleads.
-    \end{itemize}
-    \item \textbf{GitHub requirement:} Commit and push your work.
-    
-    \textbf{Proof:} In \texttt{outputs/writeup.md}, include:
-    \begin{itemize}
-      \item the output of \texttt{git status} \emph{after} committing (showing a clean working tree), and
-      \item either a screenshot of your GitHub repo showing the latest commit \emph{or} the commit hash and message.
-    \end{itemize}
-  \end{enumerate}
+%-------------------------------------------------
+\item \textbf{Variables used in all plots.}
+
+For all plots in this assignment, use the following variables:
+\begin{itemize}
+  \item \texttt{v2clacjstw} (access to justice for women)
+  \item \texttt{v2clacjstm} (access to justice for men)
+  \item \texttt{v2clkill} (freedom from political killings)
+  \item \texttt{v2cltort} (freedom from torture)
+\end{itemize}
+
+Treat all variables as continuous.
+
+\medskip
+\textbf{Proof:} In \texttt{outputs/writeup.md}, show that these variables exist and report their class.
+
+\begin{verbatim}
+names(vdem)
+str(vdem[, c("v2clacjstw","v2clacjstm","v2clkill","v2cltort")])
+\end{verbatim}
+
+%-------------------------------------------------
+\item \textbf{Create the baseline plot.}
+
+Create a scatterplot with:
+\begin{itemize}
+  \item x-axis: \texttt{v2clacjstw}
+  \item y-axis: \texttt{v2clacjstm}
+\end{itemize}
+
+\begin{verbatim}
+library(ggplot2)
+
+p0 <- ggplot(vdem, aes(
+  x = v2clacjstw,
+  y = v2clacjstm
+)) +
+  geom_point()
+
+p0
+\end{verbatim}
+
+Save the plot to \texttt{figures/}.
+
+\begin{verbatim}
+ggsave("figures/plot_baseline.png", plot = p0)
+\end{verbatim}
+
+%-------------------------------------------------
+\item \textbf{Create two plot extensions (your design choices).}
+
+Starting from the baseline plot, create \textbf{two} additional figures.
+For each extension, you will make a \textbf{design choice} about how to encode extra information.
+
+\medskip
+\textbf{Extension 1 (your choice: add ONE encoding).}
+
+Create a version of the baseline plot where you add \textbf{one} of the following:
+\begin{itemize}
+  \item map one variable to \textbf{color}, \emph{or}
+  \item map one variable to \textbf{size}.
+\end{itemize}
+
+You must use one of these variables as your added information:
+\texttt{v2clkill} or \texttt{v2cltort}.
+
+\begin{verbatim}
+# PSEUDOCODE:
+# Choose ONE:
+# - color = <your choice: v2clkill OR v2cltort>
+# OR
+# - size  = <your choice: v2clkill OR v2cltort>
+
+p1 <- ggplot(vdem, aes(
+  x = v2clacjstw,
+  y = v2clacjstm,
+  <your choice goes here>
+)) +
+  geom_point()
+
+p1
+\end{verbatim}
+
+Save this plot.
+
+\begin{verbatim}
+ggsave("figures/plot_extension1.png", plot = p1)
+\end{verbatim}
+
+\medskip
+\textbf{Extension 2 (your choice: add a SECOND encoding).}
+
+Create another version where you add a \textbf{second} encoding, so your plot uses \textbf{both}
+color and size. Use the remaining variable that you did \emph{not} use in Extension 1.
+
+\begin{verbatim}
+# PSEUDOCODE:
+# If Extension 1 used:
+#   color = v2clkill
+# then Extension 2 should add:
+#   size  = v2cltort
+#
+# If Extension 1 used:
+#   size  = v2cltort
+# then Extension 2 should add:
+#   color = v2clkill
+
+p2 <- ggplot(vdem, aes(
+  x = v2clacjstw,
+  y = v2clacjstm,
+  <your two choices go here>
+)) +
+  geom_point()
+
+p2
+\end{verbatim}
+
+Save this plot.
+
+\begin{verbatim}
+ggsave("figures/plot_extension2.png", plot = p2)
+\end{verbatim}
+
+%-------------------------------------------------
+\item \textbf{Brief written interpretation.}
+
+In \texttt{outputs/writeup.md}, write \textbf{3 short bullets}:
+\begin{itemize}
+  \item One thing you can see in the baseline plot.
+  \item One thing your Extension 1 makes easier to see.
+  \item One thing your Extension 2 makes easier (or harder) to see.
+  \item What argument is being conveyed by these plots. What are some ways the argument can be improved?
+\end{itemize}
+
+%-------------------------------------------------
+\item \textbf{GitHub submission (proof required).}
+
+Commit and push your work.
+
+\begin{verbatim}
+git add .
+git commit -m "Finish in-class visualization lab"
+git push
+\end{verbatim}
+
+\textbf{Proof:} In \texttt{outputs/writeup.md}, include:
+\begin{itemize}
+  \item the output of \texttt{git status} after committing,
+  \item the commit hash or a screenshot of the GitHub repo.
+\end{itemize}
 
 \end{enumerate}
 
 \section*{Checklist (before you leave)}
 \begin{itemize}
-  \item \texttt{scripts/lab.R} exists and runs top-to-bottom
-  \item \texttt{outputs/writeup.md} exists and includes required proofs
-  \item At least 4 figures saved in \texttt{figures/} (3 extensions + 2 audience versions can overlap if you clearly label)
-  \item Work is pushed to GitHub
+  \item \texttt{scripts/lab.R} runs top-to-bottom without errors
+  \item \texttt{outputs/writeup.md} includes all required proofs
+  \item Three figures saved in \texttt{figures/}
+  \item Changes pushed to GitHub
 \end{itemize}
 
 \end{document}

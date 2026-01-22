@@ -4,7 +4,7 @@ Create an R Project for the class in your synced drive.
 
 # Short Write-Up: Mapping Data to Visual Encodings
 
-For each plot (A–D), answer in 2–4 sentences:
+For each plot:
 
 1) What question is this plot helping answer?
 2) What variables are mapped to what visual properties?
