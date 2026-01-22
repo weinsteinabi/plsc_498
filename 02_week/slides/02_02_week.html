@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 # Coding Assignment: Mapping Data to Visual Encodings
 ]
 .subtitle[
-## Reproducible workflow + four plots + short write-up
+## Reproducible workflow + plots + short write-up
 ]
 .author[
 ### Jared Edgerton
@@ -34,7 +34,7 @@ You will complete a small, end-to-end workflow:
 - Set up a reproducible project structure
 - Load a dataset
 - Inspect variables and types
-- Produce **four** plots that illustrate different encodings
+- Produce plots that illustrate different encodings
 - Save plots to files
 - Generate a short write-up template
 - Commit + push your work
@@ -197,29 +197,6 @@ ggsave(
 
 ---
 
-# 4D) Plot D: choose a different encoding (size encodes a quantitative variable)
-
-
-``` r
-p4 &lt;- ggplot(dat, aes(x = displ, y = hwy, size = cty)) +
-  geom_point(alpha = 0.7) +
-  theme_gray()
-
-print(p4)
-```
-
-![](02_02_week_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
-
-``` r
-ggsave(
-  filename = "figures/plot_D_size_encodes_cty.png",
-  plot = p4,
-  width = 7, height = 4.5, dpi = 300
-)
-```
-
----
-
 class: small-code
 
 # 5) Create the write-up template
@@ -235,7 +212,7 @@ writeup_lines &lt;- c(
   "",
   "# Short Write-Up: Mapping Data to Visual Encodings",
   "",
-  "For each plot (A–D), answer in 2–4 sentences:",
+  "For each plot:",
   "",
   "1) What question is this plot helping answer?",
   "2) What variables are mapped to what visual properties?",
@@ -281,7 +258,7 @@ git push
 
 Success means:
 - Your code runs top-to-bottom
-- The four PNGs are saved in `figures/`
+- The PNGs are saved in `figures/`
 - The write-up file exists in `outputs/`
 - Your repo has at least one commit pushed to GitHub
     </textarea>
