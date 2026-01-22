@@ -5,6 +5,7 @@
 .DS_Store
 midterm/
 textbook/
+slides/
 *.aux
 *.txt
 *.out
