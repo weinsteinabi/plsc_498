@@ -3,13 +3,13 @@ library(ggplot2)
 library(dplyr)
 
 #create file directory for assignment
-dir.create('plsc_498/02_week/outputs', showWarnings = FALSE)
-dir.create('plsc_498/02_week/script', showWarnings = FALSE)
-dir.create('plsc_498/02_week/figures', showWarnings = FALSE)
-dir.create('plsc_498/02_week/data_processed', showWarnings = FALSE)
+dir.create('02_week/outputs', showWarnings = FALSE)
+dir.create('02_week/script', showWarnings = FALSE)
+dir.create('02_week/figures', showWarnings = FALSE)
+dir.create('02_week/data_processed', showWarnings = FALSE)
 
 #open data + summary
-vdem <- readRDS('plsc_498/02_week/data/vdem.rds')
+vdem <- readRDS('02_week/data/vdem.rds')
 
 dim(vdem) #rows: 27913, cols: 1818
 colnames(vdem[1:3]) # "country_name"    "country_text_id" "country_id" 
@@ -21,7 +21,7 @@ names(vdem)
 str(vdem[, c(1:4)])
 
 #save to data_processed folder
-write.csv(vdem, "plsc_498/02_week/data_processed/vdem_processed.csv")
+write.csv(vdem, "02_week/data_processed/vdem_processed.csv")
 
 #assignment plots
 #baseline plot
@@ -31,7 +31,7 @@ p0 <- ggplot(vdem, aes(
 )) + geom_point()
 
 p0
-ggsave("plsc_498/02_week/figures/plot_baseline.png", plot = p0)
+ggsave("02_week/figures/plot_baseline.png", plot = p0)
 
 #plot extensions
 #plot 1, color = v2clkill
@@ -51,7 +51,7 @@ p2 <- ggplot(vdem, aes(
   size = v2cltort
 )) + geom_point()
 p2
-ggsave("plsc_498/02_week/figures/plot_extension2.png", plot = p2)
+ggsave("02_week/figures/plot_extension2.png", plot = p2)
 
 
 

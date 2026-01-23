@@ -3,8 +3,8 @@ title: "writeup"
 author: "Abigail Weinstein"
 date: "2026-01-22"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The working directory for this project is rooted in the course file I have stored on my laptop. It returns the following file path:
 
-> "C:/Users/abiwe/OneDrive - The Pennsylvania State University/PLSC - Political Science/PLSC 498.1 - Visualizing Social Data"
+> "C:/Users/abiwe/OneDrive - The Pennsylvania State University/PLSC - Political Science/PLSC 498.1 - Visualizing Social Data/plsc_498"
 
 Because the working directory does not go directly to the "02_week" file in the pulled "plsc_498" repository, the commands creating folders and saving files may be a bit longer than the norm. I have created four additional folders for this weeks assignment: data_processed, outputs, figures, and script.
 
@@ -28,6 +28,7 @@ Because the working directory does not go directly to the "02_week" file in the 
 For this assignment, we utilized data from VDEM (Varieties of Democracy) to examine the political freedom and justice in a given nation. This relationship is examined through a series of three scatter plots created from a series of variables examining justice access for male and female populations, freedom from political torture, and freedom from political killings.
 
 ```{r}
+library(ggplot2)
 library(dplyr)
 vdem <- readRDS('data/vdem.rds')
 ```
@@ -56,15 +57,15 @@ As we can see, the new VDEM data frame only contains our four variables of inter
 
 The first visual that we produced is a simple one that shows only the relationship between access to justice for men in a country-year and access to justice for women in that same country-year. Thie is shown in Figure 1. In this scatterplot, we see that there is a fairly strong, linear relationship between justice access across genders.
 
-![Figure 1](plsc_498/02_week/figures/plot_baseline.png){width="373"}
+![Figure 1](images/plot_baseline.png){width="400"}
 
 We can expand upon this examination of gender equity in justice access through applying another one of our variables. In this instance, we incorporated our freedom from political killings metric (*v2clkill*) via the shade of the plotted points. This is shown in Figure 2.
 
-![Figure 2](plsc_498/02_week/figures/plot_extension1.png){width="439"}
+![Figure 2](images/plot_extension1-01.png){width="343"}
 
 The second figure gives us a more examination of the political freedoms and justice that people tend to experience. Now, we not only can see that if men have stable access to justice, so do women, but we also see that state-sanction murder is also significantly less common. This tells us that justice and more acceptable means of interacting with dissent and protest. This is enough to give us a well-rounded perspective on the relationships between justice, peace, and political freedom. However, we opt to include another metric, freedom from torture (*v2cltort*) in our third figure.
 
-![Figure 3](plsc_498/02_week/figures/plot_extension2.png){width="325"}
+![Figure 3](images/plot_extension2.png){width="334"}
 
 As with the rest of our examples, the greater the associated number is with the visual, the more freedom an individual has. Including this fourth metric, freedom from torture, shows essentially the same pattern we see revealed by the inclusion of our previous metric. Additionally, the added visual encoding of size makes the visual more difficult to read and identify specific points that may be of interest.
 
@@ -73,3 +74,5 @@ As with the rest of our examples, the greater the associated number is with the 
 Each of these three visualizations aim to tell the same story - political violence and justice are closely related. Figure 2 tells this story the best through its representation of justice in a way that addresses possible gendered differences *and* its encoding of political violence in a clear, visually appealing manner. Figure 3 attempts to do this, but has too many variables represented and Figure 1 forgoes the consideration of political violence entirely.
 
 Even with its ideal representation of the story at play, there are other visual aids that would make the narrative clearer. This includes incorporating axis titles and chart titles, as well as legends that indicate to the viewer what the numeric values actually *mean*. Incorporating these elements are just as important to developing a proper visual narrative as ensuring that the graphic has the appropriate amount visual information is.
+
+Confirmation of Submission:
