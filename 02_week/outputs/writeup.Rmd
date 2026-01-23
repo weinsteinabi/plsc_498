@@ -30,7 +30,7 @@ For this assignment, we utilized data from VDEM (Varieties of Democracy) to exam
 ```{r}
 library(ggplot2)
 library(dplyr)
-vdem <- readRDS('data/vdem.rds')
+vdem <- readRDS('02_week/data/vdem.rds') #note: due to file location, may not render when .Rmd is compiled - /output does not have access to /data. 
 ```
 
 The entire VDEM data set provided, found in the "***data***" folder, consists of 27913 observations (rows) across 1818 variables (columns). A brief glimpse into the full data set shows the each observation is representative of a different country, presumably in a different year. The code chunk below shows the first few columns within the data set, in addition to the dimensions of the full data set as produced by the *colnames* and *dim* commands in R.
@@ -76,3 +76,7 @@ Each of these three visualizations aim to tell the same story - political violen
 Even with its ideal representation of the story at play, there are other visual aids that would make the narrative clearer. This includes incorporating axis titles and chart titles, as well as legends that indicate to the viewer what the numeric values actually *mean*. Incorporating these elements are just as important to developing a proper visual narrative as ensuring that the graphic has the appropriate amount visual information is.
 
 Confirmation of Submission:
+
+> On branch main
+>
+> Your branch is up to date with 'origin/main'.
