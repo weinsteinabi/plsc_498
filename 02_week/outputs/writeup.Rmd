@@ -30,7 +30,7 @@ For this assignment, we utilized data from VDEM (Varieties of Democracy) to exam
 ```{r}
 library(ggplot2)
 library(dplyr)
-vdem <- readRDS('02_week/data/vdem.rds') #note: due to file location, may not render when .Rmd is compiled - /output does not have access to /data. 
+vdem <- readRDS('vdem.rds') #note: made copy to outputs folder so .Rmd could render with code chunks. 
 ```
 
 The entire VDEM data set provided, found in the "***data***" folder, consists of 27913 observations (rows) across 1818 variables (columns). A brief glimpse into the full data set shows the each observation is representative of a different country, presumably in a different year. The code chunk below shows the first few columns within the data set, in addition to the dimensions of the full data set as produced by the *colnames* and *dim* commands in R.
