@@ -20,6 +20,8 @@ list.files("03_week") #"data", "figures", "outputs","problem_set","scripts"
 list.files("03_week/data") #"codebook.md", "HOUSE_precinct_general.csv", "README.md", "cleanHouse.csv"
 ```
 
+Please note that this "HOUSE_precinct_general.csv" is NOT in GitHub because of how large the file is.
+
 ## Data Loading and Cleaning
 
 Now that we have our files system set up, we can begin working with our data. To begin this exploration of our data and the role scaling plays in clarifying visualizations, we first need to import our data. We are specifically looking at 2018 general election data for the House of Representatives. This data set has more information than we need for our current goal, so we begin working with the data by filtering out the information we do not need. This will leave us with information relating to the main two parties during the general election. From here, we need to aggregate the total number of votes for each party and overall. To do this, we will use the *summarize* and *mutate* functions.
@@ -40,6 +42,20 @@ The two visualizations shown (hopefully) below map the relationship between Repu
 ![Fig 1](plot_raw.png)
 
 ![Fig 2](plot_scaled.png) The second visualization provides a much clearer and in-depth look at voting patterns within counties than the first one does. The only issue may be that the sheer difference in vote totals is not as clear without a closer look, but this is not central to the goal of the visualization. As such, it does not hinder interpretation and is far more appropriate to show an audience than the first visual created. Also note that the second visualization has its Y-axis represented in percentages, making interpretation even easier.
+
+## Upload Confirmation
+
+```{r}
+##git status: 
+# On branch main
+# Your branch is up to date with 'origin/main'
+
+##git log -1
+# Author: weinsteinabi <abiweinstein@gmail.com>
+# Date:   Fri Jan 30 17:40:05 2026 -0500
+#
+#    wekk3assignment1
+```
 
 ## Citations
 
