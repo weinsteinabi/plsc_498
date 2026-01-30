@@ -4,22 +4,25 @@
 \setlist{nosep}
 \usepackage[margin=1in]{geometry}
 
-\title{In-Class Problem Set: Scaling Plots with Overdispersed Election Data (R + GitHub)}
+\title{In-Class Problem Set: Scaling Plots with Overdispersed Election Data (R + GitHub \emph{or} Canvas)}
 \author{}
 \date{}
 
 \begin{document}
 \maketitle
 
-\noindent \textbf{Goal.} Use overdispersed election data to practice how axis scaling changes what patterns are visible. You will (i) pull data from GitHub, (ii) build a reproducible workflow, (iii) make the same plot twice (raw vs scaled), (iv) write an interpretation comparing the two, and (v) submit via GitHub.
+\noindent \textbf{Goal.} Use overdispersed election data to practice how axis scaling changes what patterns are visible. You will (i) obtain data from the course materials (GitHub \emph{or} Canvas), (ii) build a reproducible workflow, (iii) make the same plot twice (raw vs scaled), (iv) write an interpretation comparing the two, and (v) submit via \textbf{GitHub \emph{or} Canvas}.
 
 \medskip
-\noindent \textbf{What to submit (in your GitHub repo).}
+\noindent \textbf{What to submit (GitHub \emph{or} Canvas).}
 \begin{itemize}
   \item A script file: \texttt{scripts/lab.R}
   \item A short write-up: \texttt{outputs/writeup.md}
   \item Two saved figures: \texttt{figures/plot\_raw.png} and \texttt{figures/plot\_scaled.png}
 \end{itemize}
+
+\noindent If you submit via Canvas, upload the same files listed above as individual files
+(or as a single zipped folder that preserves the directory structure).
 
 \medskip
 \noindent \textbf{Rules.}
@@ -27,17 +30,40 @@
   \item Work inside an \textbf{R Project}.
   \item Use a \textbf{sequential, hard-coded workflow} (no user-defined functions).
   \item Save outputs using code (\texttt{ggsave}); do not rely on screenshots.
-  \item Git commands go in the \textbf{Terminal tab} (not the R Console).
+  \item If you choose the \textbf{GitHub submission option}, Git commands go in the \textbf{Terminal tab} (not the R Console).
 \end{itemize}
+
+\section*{Submission options}
+
+You may submit this assignment using \textbf{either} of the following methods:
+
+\begin{itemize}
+  \item \textbf{GitHub submission (recommended):}
+  Commit and push your work to your GitHub repository. You will include Git proof
+  (\texttt{git status} and \texttt{git log}) in your write-up.
+
+  \item \textbf{Canvas submission:}
+  Upload the required files directly to Canvas. You do \emph{not} need to use GitHub
+  if you choose this option.
+\end{itemize}
+
+\noindent Both submission methods are graded using the same rubric.
 
 \section*{Questions}
 
 \begin{enumerate}
 
-  \item \textbf{Copy the data from GitHub (proof required).}
+  \item \textbf{Get the data (proof required).}
   \begin{enumerate}
-    \item Pull the latest version of the course repository to ensure you have the election dataset.
-    \item Confirm the dataset file exists.
+    \item Choose \textbf{one} method:
+    \begin{itemize}
+      \item \textbf{GitHub option:} Pull the latest version of the course repository to obtain the election dataset (and codebook, if included).
+      \item \textbf{Canvas option:} Download the election dataset (and codebook, if provided) from Canvas and place the dataset file in your project \texttt{data/} folder.
+    \end{itemize}
+    \item Confirm the dataset file exists at:
+    \[
+      \texttt{data/HOUSE\_precinct\_general.csv}
+    \]
     \item \textbf{Proof (write-up):} In \texttt{outputs/writeup.md}, paste:
     \begin{itemize}
       \item the output of \texttt{getwd()} (from inside your R Project), and
@@ -77,7 +103,53 @@
       \item \texttt{county\_total\_votes = DEMOCRAT + REPUBLICAN}
       \item \texttt{rep\_share = REPUBLICAN / (DEMOCRAT + REPUBLICAN)}
     \end{itemize}
-    \item \textbf{Suggested edit:} Use the codebook (in the repo) to confirm the meaning of \texttt{votes}, \texttt{party\_simplified}, and \texttt{county\_name}. Cite the codebook filename in your write-up.
+    
+\item \textbf{Pseudo-code (follow, but fill in blanks).} Add something like this to \texttt{scripts/lab.R}:
+
+\begin{verbatim}
+# ---- Load + clean + aggregate (pseudo-code) ----
+
+library(____)
+library(____)
+
+# 1) Load data
+df <- read.csv("data/______.csv")
+
+# 2) Quick inspection (pick at least two)
+dim(df)
+names(df)
+head(df)
+
+# 3) Filter down to the rows we want
+df_keep <- df %>%
+  filter(stage == "____") %>%
+  filter(party_simplified %in% c("____", "____")) %>%
+  filter(_____)   # county info is not missing
+
+# 4) County-level aggregation
+county_df <- df_keep %>%
+  group_by(_____) %>%          # county (and maybe state if needed)
+  summarize(
+    dem_votes = sum(votes[party_simplified == "DEMOCRAT"], na.rm = TRUE),
+    rep_votes = sum(votes[party_simplified == "REPUBLICAN"], na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    county_total_votes = dem_votes + rep_votes,
+    rep_share = rep_votes / (dem_votes + rep_votes)
+  )
+
+# 5) Checks (fill in at least two)
+nrow(county_df)
+summary(county_df$county_total_votes)
+summary(county_df$rep_share)
+# Optional: confirm rep_share is between 0 and 1
+# range(_____)
+\end{verbatim}
+
+    
+    
+    \item \textbf{Suggested edit:} Use the codebook (provided with the course materials) to confirm the meaning of \texttt{votes}, \texttt{party\_simplified}, and \texttt{county\_name}. Cite the codebook filename in your write-up.
     \item \textbf{Proof (write-up):} report:
     \begin{itemize}
       \item number of counties in your aggregated dataset,
@@ -87,7 +159,7 @@
   \end{enumerate}
 
   \item \textbf{Plot 1: raw scale (required).}
-  
+
   Create a scatter plot with:
   \begin{itemize}
     \item x-axis: \texttt{county\_total\_votes}
@@ -103,7 +175,7 @@
   \noindent \textbf{Suggested edit:} Label axes clearly (what is being measured), and include a legend title.
 
   \item \textbf{Plot 2: scaled version (required).}
-  
+
   Make the \emph{same} plot again, but change the scale of the x-axis to address overdispersion. Use one of:
   \begin{itemize}
     \item log scaling (e.g., log10 x-axis), or
@@ -115,9 +187,9 @@
     \texttt{figures/plot\_scaled.png}
   \]
 
-  \noindent \textbf{Suggested edit:} Make the axis label explicitly indicate the scaling choice (e.g., “log scale”).
+  \noindent \textbf{Suggested edit:} Make the axis label explicitly indicate the scaling choice (e.g., ``log scale'').
 
-  \item \textbf{Interpretation + GitHub submission (proof required).}
+  \item \textbf{Interpretation + submission (proof required).}
   \begin{enumerate}
     \item In \texttt{outputs/writeup.md}, write 8--12 sentences answering:
     \begin{itemize}
@@ -127,12 +199,26 @@
       \item If you had to show only one version to a general audience, which would you choose and why?
     \end{itemize}
 
-    \item Commit and push your work to GitHub.
-
-    \item \textbf{Proof (write-up):} paste:
+    \item \textbf{Choose ONE submission method:}
     \begin{itemize}
-      \item the output of \texttt{git status} after your commit (clean working tree), and
-      \item the output of \texttt{git log -1} (one line is fine).
+      \item \textbf{GitHub option:} Commit and push your work to GitHub.
+      \item \textbf{Canvas option:} Upload \texttt{scripts/lab.R}, \texttt{outputs/writeup.md}, \texttt{figures/plot\_raw.png}, and \texttt{figures/plot\_scaled.png} to Canvas.
+    \end{itemize}
+
+    \item \textbf{Proof (write-up):}
+    \begin{itemize}
+      \item If using \textbf{GitHub}: paste
+      \begin{itemize}
+        \item the output of \texttt{git status} after your commit (clean working tree), and
+        \item the output of \texttt{git log -1} (one line is fine).
+      \end{itemize}
+      \item If using \textbf{Canvas}: paste
+      \begin{itemize}
+        \item the output of \texttt{list.files("scripts")},
+        \item the output of \texttt{list.files("outputs")},
+        \item the output of \texttt{list.files("figures")},
+        \item and write one sentence stating you submitted via Canvas.
+      \end{itemize}
     \end{itemize}
   \end{enumerate}
 
@@ -147,7 +233,7 @@ Create a second scaled plot where you change the scale choice (e.g., compare log
   \item \texttt{figures/plot\_raw.png} exists
   \item \texttt{figures/plot\_scaled.png} exists
   \item \texttt{outputs/writeup.md} includes required interpretation and proofs
-  \item Work is committed and pushed to GitHub
+  \item Work is either committed and pushed to GitHub \emph{or} uploaded to Canvas
 \end{itemize}
 
 \end{document}
