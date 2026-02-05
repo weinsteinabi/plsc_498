@@ -27,8 +27,6 @@ Please email **Angela Hill** for enrollment: **amr25@psu.edu**
 This repository is organized by week (`01_week`, `02_week`, …). Each weekly folder contains:
 - the **problem set** materials,
 - the **code** used to build lecture slide decks,
-- **images/assets** used in slides,
-- **outputs** (rendered slides, PDFs, compiled artifacts),
 - and any **syllabus outputs** relevant to that week.
 
 **Note:** The **second slide deck** in each week always includes the **code needed to complete the problem set**.
