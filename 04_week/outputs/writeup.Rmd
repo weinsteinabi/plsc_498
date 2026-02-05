@@ -68,6 +68,14 @@ When working with data visualizations, it is imperative that color be properly u
 
 ## Commit Confirmation
 
+```{r}
+#On branch main
+#Your branch is up to date with 'origin/main'
+#
+#nothing to commit, working tree clean
+#
+```
+
 ## Citations
 
 1.  Lewis, J. B., Poole, K. T., & Rosenthal, H. (n.d.). *Voteview: About the project*. Voteview. <https://voteview.com/about>
