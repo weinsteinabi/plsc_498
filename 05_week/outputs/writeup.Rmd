@@ -72,9 +72,15 @@ From this plot, we that there is a positive, somewhat linear relationship betwee
 ## Submission Check
 
 ```{r}
+#git status: 
+# On branch main
+# Your branch is up to date with 'origin/main'
+# nothing to commit, working tree clean
 #
-#
-#
-#
+#git log -1
+# commit 1920c5ebddf8291dc97f5e604dc20fd7e78eb410 (HEAD -> main, origin    # /main, origin/HEAD)
+# Author: weinsteinabi <abiweinstein@gmail.com>
+# Date: Thu Feb 12 12:43:04 2026
+#       initialcommitweek5
 #
 ```
