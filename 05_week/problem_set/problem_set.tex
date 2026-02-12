@@ -4,22 +4,25 @@
 \setlist{nosep}
 \usepackage[margin=1in]{geometry}
 
-\title{In-Class Problem Set: Exploring Movie Data with Distribution and Color (R + GitHub)}
+\title{In-Class Problem Set: Exploring Movie Data with Distribution and Color (R + GitHub \emph{or} Canvas)}
 \author{}
 \date{}
 
 \begin{document}
 \maketitle
 
-\noindent \textbf{Goal.} Use real movie data to practice visualizing distributions, comparing groups, and encoding multiple variables in a single plot. You will pull the dataset from GitHub, build a reproducible workflow, generate several plots, interpret what they show, and submit your work via GitHub.
+\noindent \textbf{Goal.} Use real movie data to practice visualizing distributions, comparing groups, and encoding multiple variables in a single plot. You will obtain the dataset from the course materials (GitHub \emph{or} Canvas), build a reproducible workflow, generate several plots, interpret what they show, and submit your work via \textbf{GitHub \emph{or} Canvas}.
 
 \medskip
-\noindent \textbf{What to submit (in your GitHub repo).}
+\noindent \textbf{What to submit (GitHub \emph{or} Canvas).}
 \begin{itemize}
   \item A script file: \texttt{scripts/lab.R}
   \item A short write-up: \texttt{outputs/writeup.md}
   \item Saved figures in \texttt{figures/} (see requirements below)
 \end{itemize}
+
+\noindent If you submit via Canvas, upload the same files listed above as individual files
+(or upload a single zip that preserves the directory structure).
 
 \medskip
 \noindent \textbf{Rules.}
@@ -27,8 +30,23 @@
   \item Work inside an \textbf{R Project}.
   \item Use a \textbf{sequential, hard-coded workflow} (no user-defined functions).
   \item Save figures using code (\texttt{ggsave}); do not use screenshots.
-  \item Git commands must be run in the \textbf{Terminal tab}, not the R Console.
+  \item If you choose the \textbf{GitHub submission option}, Git commands must be run in the \textbf{Terminal tab}, not the R Console.
 \end{itemize}
+
+\section*{Submission options}
+
+You may submit this assignment using \textbf{either} of the following methods:
+
+\begin{itemize}
+  \item \textbf{GitHub submission (recommended):}
+  Commit and push your work to your GitHub repository. You will include Git proof
+  (\texttt{git status} and \texttt{git log}) in your write-up.
+  \item \textbf{Canvas submission:}
+  Upload the required files directly to Canvas. You do \emph{not} need to use GitHub
+  if you choose this option.
+\end{itemize}
+
+\noindent Both submission methods are graded using the same rubric.
 
 \section*{Mini codebook (use this; do not guess)}
 
@@ -47,27 +65,53 @@ Each row represents one movie. Relevant variables include:
 
 \begin{enumerate}
 
-  \item \textbf{Pull the movie dataset from GitHub (proof required).}
+  \item \textbf{Get the movie dataset (proof required).}
   \begin{enumerate}
-    \item In the \textbf{Terminal tab}, run:
+    \item Choose \textbf{one} method:
+    \begin{itemize}
+      \item \textbf{GitHub option:} In the \textbf{Terminal tab}, run:
 \begin{verbatim}
 git status
 git pull
 \end{verbatim}
-    \item Confirm the movie dataset exists in your repo (location specified in the course GitHub).
+      \item \textbf{Canvas option:} Download the movie dataset from Canvas and place it in your project \texttt{data/} folder.
+    \end{itemize}
+
+    \item \textbf{Pseudo-code (follow structure; fill in details):}
+\begin{verbatim}
+# confirm working directory
+__________()
+
+# list files in data directory
+__________("data")
+
+# visually confirm expected movie file exists
+\end{verbatim}
+
+    \item Confirm the movie dataset exists in your project.
     \item \textbf{Proof (write-up):} In \texttt{outputs/writeup.md}, paste:
     \begin{itemize}
-      \item the output of \texttt{getwd()} from inside your R Project, and
-      \item the output of \texttt{list.files("data")} showing the movie file.
+      \item the output of \texttt{getwd()},
+      \item the output of \texttt{list.files("data")}.
     \end{itemize}
   \end{enumerate}
 
   \item \textbf{Load and summarize the dataset.}
   \begin{enumerate}
     \item Load the movie dataset into an object named \texttt{df}.
+
+    \item \textbf{Pseudo-code (intentionally incomplete):}
+\begin{verbatim}
+df <- read.csv("data/__________.csv")
+
+# quick structure checks (choose at least two)
+__________(df)
+__________(df)
+__________(df)
+\end{verbatim}
+
     \item Summarize the dataset to understand its structure.
-    
-    \textbf{Suggested edit:} Use \texttt{dim(df)}, \texttt{names(df)}, and a focused summary of \texttt{budget} and \texttt{revenue}.
+
     \item \textbf{Proof (write-up):} Report:
     \begin{itemize}
       \item number of rows and columns,
@@ -77,18 +121,40 @@ git pull
   \end{enumerate}
 
   \item \textbf{Plot distributions: movie budget and revenue.}
-  
+
   Create two histograms:
   \begin{itemize}
     \item one for \texttt{budget},
     \item one for \texttt{revenue}.
+    \item Repeat the process again and chose alternative bin sizes to assess how that changes the interpretation. Use one of the following formulas: 
+    
+    \begin{itemize}
+  \item \textbf{Freedman--Diaconis (bin width):}
+  \[
+    h = 2 \cdot \mathrm{IQR}(x) \cdot n^{-1/3}
+  \]
+  \item \textbf{Scott's Rule (bin width):}
+  \[
+    h = 3.5 \cdot s(x) \cdot n^{-1/3}
+  \]
+  \item \textbf{Sturges' Rule (number of bins):}
+  \[
+    k = \lceil \log_2(n) + 1 \rceil
+  \]
+\end{itemize}
+
   \end{itemize}
 
-  \noindent \textbf{Suggested edit (important):}
-  \begin{itemize}
-    \item Use consistent bin widths.
-    \item Decide whether to include or exclude zero values, and state your choice.
-  \end{itemize}
+  \item \textbf{Pseudo-code (structure only):}
+\begin{verbatim}
+# budget histogram
+ggplot(df, aes(x = ________)) +
+  geom_histogram(__________)
+
+# revenue histogram
+ggplot(df, aes(x = ________)) +
+  geom_histogram(__________)
+\end{verbatim}
 
   \noindent Save the plots as:
   \begin{itemize}
@@ -98,20 +164,30 @@ git pull
 
   \item \textbf{Identify top-grossing directors and compare revenue.}
   \begin{enumerate}
-    \item Identify the \textbf{top three directors} by total box office revenue (sum of \texttt{revenue}).
+    \item Identify the \textbf{top three directors} by total box office revenue.
     \item Subset the data to movies directed by these three directors.
     \item Create a \textbf{boxplot} showing the distribution of \texttt{revenue} for each director.
   \end{enumerate}
+
+  \item \textbf{Pseudo-code (leave blanks):}
+\begin{verbatim}
+top_directors <- df %>%
+  group_by(__________) %>%
+  summarize(total_revenue = ________) %>%
+  arrange(__________) %>%
+  slice(____)
+
+df_top <- df %>%
+  filter(__________ %in% top_directors$__________)
+\end{verbatim}
 
   \noindent Save the plot as:
   \[
     \texttt{figures/revenue\_by\_director.png}
   \]
 
-  \noindent \textbf{Suggested edit:} Ensure the director names are readable and the y-axis is clearly labeled in USD.
+  \item \textbf{Scatter plot with size and color encodings.}
 
-  \item \textbf{Scatter plot with size and category encodings.}
-  
   Create a scatter plot with:
   \begin{itemize}
     \item x-axis: \texttt{budget}
@@ -120,15 +196,16 @@ git pull
 
   Then:
   \begin{itemize}
-    \item Choose \textbf{one additional quantitative variable} (e.g., \texttt{popularity} or \texttt{vote\_count}) and map it to \textbf{point size}.
-    \item Choose \textbf{one categorical variable} (e.g., \texttt{original\_language} or a simplified genre indicator) and map it to \textbf{color}.
+    \item map one quantitative variable to \textbf{point size},
+    \item map one categorical variable to \textbf{color}.
   \end{itemize}
 
-  \noindent \textbf{Suggested edit:}
-  \begin{itemize}
-    \item Use a color palette that makes category differences clear.
-    \item Avoid using size in a way that hides smaller-budget films.
-  \end{itemize}
+  \item \textbf{Pseudo-code (structure only):}
+\begin{verbatim}
+ggplot(df, aes(x = ________, y = ________,
+               size = ________, color = ________)) +
+  geom_point(__________)
+\end{verbatim}
 
   \noindent Save the plot as:
   \[
@@ -139,44 +216,49 @@ git pull
 
   In \texttt{outputs/writeup.md}, write 10--14 sentences addressing:
   \begin{itemize}
-    \item What do the budget and revenue histograms reveal about the movie industry?
-    \item How do revenues differ across the top-grossing directors?
-    \item In the scatter plot, what relationships are most visually salient?
-    \item How do size and color encodings change what is easy or hard to see?
+    \item what the budget and revenue distributions reveal,
+    \item how revenues differ across top directors,
+    \item what relationships are most salient in the scatter plot,
+    \item how size and color encodings affect interpretation.
   \end{itemize}
 
-  \item \textbf{Push your work to GitHub (proof required).}
+  \item \textbf{Submit your work (GitHub \emph{or} Canvas) + proof required.}
   \begin{enumerate}
-    \item In the \textbf{Terminal tab}, run:
+    \item \textbf{Choose ONE submission method:}
+    \begin{itemize}
+      \item \textbf{GitHub option:} Commit and push your work to GitHub.
+      \item \textbf{Canvas option:} Upload \texttt{scripts/lab.R}, \texttt{outputs/writeup.md}, and all required figures to Canvas.
+    \end{itemize}
+
+    \item \textbf{Pseudo-code (submission skeleton):}
 \begin{verbatim}
+# GitHub option
 git status
-git add .
-git commit -m "Movie data visualization lab"
+git add ______
+git commit -m "__________"
 git push
 \end{verbatim}
-    \item \textbf{Proof (write-up):} Paste:
+
+    \item \textbf{Proof (write-up):}
     \begin{itemize}
-      \item the output of \texttt{git status} after committing (clean working tree), and
-      \item the output of \texttt{git log -1}.
+      \item If using \textbf{GitHub}: paste \texttt{git status} and \texttt{git log -1}.
+      \item If using \textbf{Canvas}: paste \texttt{list.files("scripts")},
+            \texttt{list.files("outputs")}, and \texttt{list.files("figures")},
+            and state that you submitted via Canvas.
     \end{itemize}
   \end{enumerate}
 
 \end{enumerate}
 
 \section*{Optional challenge (if you finish early)}
-Choose one plot and create an alternative version optimized for a \textbf{general public} audience rather than an expert audience. In 5--7 sentences, explain:
-\begin{itemize}
-  \item what design choices you changed,
-  \item what information you simplified or emphasized,
-  \item and why these changes are appropriate for a public-facing visualization.
-\end{itemize}
+Choose one plot and create an alternative version optimized for a \textbf{general public} audience. In 5--7 sentences, explain what design choices you changed and why.
 
 \section*{Checklist (before you leave)}
 \begin{itemize}
   \item \texttt{scripts/lab.R} runs top-to-bottom
-  \item \texttt{outputs/writeup.md} exists and includes interpretations + proofs
+  \item \texttt{outputs/writeup.md} exists and includes interpretation + proofs
   \item Required figures exist in \texttt{figures/}
-  \item Work is committed and pushed to GitHub
+  \item Work is either committed and pushed to GitHub \emph{or} uploaded to Canvas
 \end{itemize}
 
 \end{document}

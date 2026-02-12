@@ -1,0 +1,80 @@
+---
+title: "writeup"
+author: "Abigail Weinstein"
+date: "2026-02-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(stats)
+library(stringr)
+library(scales)
+```
+
+## Directory Set-Up
+
+All necessary data, scripts, figures, and outputs can be found in the **05_week** folders of this repository in their respectively named sub-folders. Below is a summary of the file structure, and working directory for this assignment.
+
+```{r, results = "hide"}
+getwd() #C:/Users/abiwe/OneDrive - The Pennsylvania State University/PLSC - Political Science/PLSC 498.1 - Visualizing Social Data/plsc_498
+
+list.files("05_week") #"data" "figures" "outputs" "problem_set" "scripts" 
+
+list.files("05_week/data") #"IMDB_Movies_Data.csv"
+```
+
+## Data + Data Cleaning
+
+Data for this assignment was pulled from *IMDb*, an online database for all things related to films. The specific data set utilized includes a sample of 42 films released in the past 30 years. Details each observation in the data include release date, film title, genre, and run time in addition to 12 other variables of interest. For our purposes, we are focusing in on a subset of five of these: revenue, budget, director, genre, and popularity. It should be noted that this is *not* a clean data set - a significant portion of our columns have numerous entries within a singular cell. This does create some issue for future data visualizations, so we will address this concern in our data cleaning step.
+
+```{r}
+df <- read.csv("IMDB_Movies_Data.csv")
+
+dim(df) #rows: 42, columns: 16
+names(df) 
+```
+
+To prepare for creating our visualizations, which are intended to explore the characteristics of films in reference to budget and revenue, we need to explore those two variables of interest. To do so, want to examine the distributions of both budget and revenue. First, we will simply look at the summary statistics and range of the values. Then, we will plot a scaled distribution of the data.
+
+```{r}
+summary(df$revenue)
+range(df$revenue)
+
+summary(df$budget)
+range(df$budget)
+```
+
+From the code executed, we can see that both revenue and budget are skewed, pulling the mean further right of the median as a result of the substantial maximum values in each distribution. Each variable begins with observations with negligible values (i.e., \$0). Revenue has observations that reach nearly \$1,000,000 USD and budgets exist in the data reaching over \$300,000,000 USD. While these values are substantial and skew is significant, we will only be transforming data to address scale labeling issues to reduce visual clutter. As such, we scale revenue to be in millions of USD in each visualization. We opt to do this instead of logging values due to 1) the existence of zero values within the data and 2) it is necessary to display the scale of difference in these observations.
+
+![](revenue_hist.png){width="459"}
+
+![](images/clipboard-3250048637.png){width="446"}
+
+The histograms above display this skewed distribution discussed earlier, with half of the films having both small budgets and earnings. It should be noted that these histograms were created utilizing Sturges' Rule for number of bins.
+
+## Directors, Genres, and Popularity
+
+In our exploration of revenue and budget, we have opted to examine them through the perspectives of directors, genres, and film popularity. To do so, we need to transform data slightly, specifically regarding genre. Instead of including the entire list of genres associated with a film, we cut the data such that only the first genre was kept for each film.
+
+![](revenue_by_director.png)
+
+In the dot plot above, we highlight the earnings of the top-grossing directors in the data provided. The data indicates that Chris Renaud is the highest-earning director, with nearly \$1,000,000 USD in revenue, followed by Christopher McGuire at \~\$700,000,000 USD and Jon Woo at \~\$550,000,000. This plot highlights a significant gap even among the top earners in the data and indicates to us that part of the reason for the substantial skew in the our distributions is due to a singular film - which, of course, is a Minions/Despicable Me project. Even without these observations, the data would still be skewed due to the significant presence of low budget, low revenue films, but it is still necessary to highlight the influence of these high-grossing projects.
+
+![](budget_revenue_scatter.png)
+
+In our final piece of exploration, we plot films in the data by their budget, revenue, popularity, and genre. Budget and revenue are plotted on the x and y axes respectively, each scaled to be in millions of USD. Film popularity is represented by the size of the plotted point and color represents the movie genre (it should be noted that genre does technically exceed the number of categories where it is appropriate to use color, but colors are distinct enough here and data is dispersed enough where it does not pose *too* much of a problem).
+
+From this plot, we that there is a positive, somewhat linear relationship between budget of a film and its resulting revenue. We also see that specific genres are more popular among viewers - specifically action and adventure films - as indicated by the size/color combinations on the plot. There does not appear to be any consistent relationship between budget or revenue and genre, but more popular films do appear to generate more revenue, which is to be expected.
+
+## Submission Check
+
+```{r}
+#
+#
+#
+#
+#
+```
