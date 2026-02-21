@@ -93,6 +93,7 @@ While the color method of grouping data distributions was somewhat ineffective, 
 #
 #git log -1: 
 #
-#
-#
+#Author: weinsteinabi <abiweinstein@gmail.com>
+#Date:   Sat Feb 21 18:15:17 2026
+#        upload week06 assignment
 ```
