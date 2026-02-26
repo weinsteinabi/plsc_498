@@ -130,6 +130,6 @@ Like with the region data, we did drop a category of observations from this grou
 #git log -1: 
 #
 #Author: weinsteinabi <abiweinstein@gmail.com>
-#
-#
+#Date:   Thu Feb 26 17:06:09 2026
+#        week 7 assignment + pull midterm info
 ```
