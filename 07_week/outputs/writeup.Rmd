@@ -103,11 +103,11 @@ Q-Q or Quantile-Quantile plots are used to evaluate the normality of data or res
 
 The QQ plot on the left highlights just how skewed our data is relative to what would be a normal distribution of the data. The left tail is slightly flat but otherwise normal for most of the distribution until we reach the $x = 1$ position of the x-axis. Here, we see our data pulling away from the normal line at an exponential rate. This indicates to us that not only is our data right skewed (right values above the predicted values and thinly dispersed), but it is also non-linear and likely exponential in nature. This would impact any work done with this data substantially and should be transformed before us. To do so, we take the $log(x + 1)$ of the data, as $ln(x)$ is the inverse of $e$ . The assumption of this transformation is that the data would be normal afterwards. The QQ plot on the right supports this assumption, as all transformed points follow the line of predicted quantiles more accurately. The multi-modality of the transformed distribution is highlighted, seen in the bump up off the quantile line around $x = -1$. While the multi-modality may be an issue later, this data is now more sufficient for use beyond poor visualization as a result of transformation.
 
-### Faceted Histograms 
+### Faceted Histograms
 
 As mentioned earlier, there were also `income` and `region` values included for every observation. We want to explore the distribution of `battle_deaths` by each of the categories in those variables. Each of these are built using the `trans = "log1p"` argument for clearer comparisons within and across distributions.
 
-#### *Facet by Region* 
+#### *Facet by Region*
 
 ![](07_week/outputs/figures/facet_region.png)
 
