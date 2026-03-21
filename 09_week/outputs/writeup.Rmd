@@ -1,0 +1,33 @@
+---
+title: "Week 9 Write-Up"
+author: "Abigail Weinstein"
+date: "2026-03-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggpubr)
+library(scales)
+```
+
+## Data Description and Wrangling
+
+```{r}
+
+```
+
+## Total Deaths by State
+
+![](09_week/outputs/figures/total_illness_deaths_by_state.png)
+
+## Proportion of Deaths by Candidate
+
+![](09_week/outputs/figures/illness_deaths_by_winner_proportion.png)
+
+## Total Deaths by Candidate and State
+
+![](09_week/outputs/figures/illness_deaths_faceted_by_winner.png)
