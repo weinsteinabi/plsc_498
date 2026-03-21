@@ -63,8 +63,7 @@ df %>% select(c(totalvotes, `COVID-19`)) %>%
 
 The question we seek to answer with this data is how COVID-19 losses relate to election outcomes by state, if at all. To do so, we first will identify total losses by state. From there we will explore the proportion of deaths by candidate and counts clearly separated by illness and candidate.
 
-## 
-Total Deaths by State
+## Total Deaths by State
 
 ![](figures/total_illness_deaths_by_state.png)
 
@@ -72,7 +71,7 @@ The above figure shows a bar chart of total deaths from both COVID-19 and pneumo
 
 ## Proportion of Deaths by Candidate
 
-![](09_week/outputs/figures/illness_deaths_by_winner_proportion.png)
+![](figures/illness_deaths_by_winner_proportion.png)
 
 In this visual, we see the candidates of the 2020 election based on the proportion of the national death toll they "adopt" based on the states they won. We yet again use that red/blue color palette to represent the candidates. The figure implies that Biden-favoring states make up over half of the nations deaths. Trump-favoring states consist of only $48$% of deaths. Without additional information, we again could assume that states with worse health outcomes favor Biden and his policies. Additional context regarding number of states won and overall victor change that interpretation. This information is NOT shown in this visual, but is implied in the previous one. Biden won one more state than Trump did in the 2020 election and one of those states was the most populous in the nation (as implied by death and vote counts). With this context, it follows that Biden would, in fact, represent a greater portion of deaths as he represents a greater portion of the votes in general.
 
