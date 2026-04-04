@@ -98,8 +98,19 @@ Beyond these aesthetic decisions, we also needed to determine how to treat abnor
 ## Git Hub Confirmation
 
 ```{r}
+#git status: 
+# On branch main
+# Your branch is up to date with 'origin/main'
+# nothing to commit, working tree clean
 #
+#git log -2:
 #
+#Author: weinsteinabi <abiweinstein@gmail.com>
+#Date:   Fri Apr 3 10:56:26 2026
+#        create basketball_clean.csv
 #
+#Author: weinsteinabi <abiweinstein@gmail.com>
+#Date:   Sat Apr 4 12:04:52 2026
+#        push week11 lab
 #
 ```
