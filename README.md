@@ -1,6 +1,8 @@
 # Visualizing Social Data (PLSC 498)
 
-Below is the course description associated with PLSC 498.2: Visualizing Social Data. Following this is the directory for the repository
+Below is the course description associated with PLSC 498.2: Visualizing Social Data. Following this is the directory for the repository. 
+
+This course was completed May 1st, 2026. This repository was updated on June 4th, 2026.
 
 ## 📝 Course description
 **Visualizing Social Data** is designed for undergraduate students majoring in Social Data Analytics and related disciplines. The primary objective is to introduce students to the tools, principles, and practices for visualizing complex social science data. Students engage with a range of visualization techniques (static and interactive) and apply these methods through hands-on projects.
